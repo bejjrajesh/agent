@@ -72,12 +72,14 @@ func (r *MetricsSender) Process(msg *core.Message) {
 		}
 		for _, p := range payloads {
 			if !r.readyToSend.Load() {
+				log.Debugf("metrics_sender is not ready to send the metrics")
 				continue
 			}
 
 			switch report := p.(type) {
 			case *proto.MetricsReport:
 				message := client.MessageFromMetrics(report)
+				log.Debugf("metrics_sender sending the metrics report")
 				err := r.reporter.Send(r.ctx, message)
 				if err != nil {
 					log.Errorf("Failed to send MetricsReport: %v", err)
@@ -85,6 +87,7 @@ func (r *MetricsSender) Process(msg *core.Message) {
 					r.pipeline.Process(core.NewMessage(core.MetricReportSent, nil))
 				}
 			case *models.EventReport:
+				log.Debugf("metrics_sender sending the events report")
 				err := r.reporter.Send(r.ctx, client.MessageFromEvents(report))
 				if err != nil {
 					l := len(report.Events)

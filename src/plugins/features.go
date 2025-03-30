@@ -135,7 +135,7 @@ func (f *Features) Process(msg *core.Message) {
 
 func (f *Features) enableMetricsFeature(_ string) []core.Plugin {
 	if !f.pipeline.IsPluginAlreadyRegistered(agent_config.FeatureMetrics) {
-
+		log.Debugf("inside features.go, enabling metrics, throttle and sender")
 		conf, err := config.GetConfig(f.conf.ClientID)
 		if err != nil {
 			log.Warnf("Unable to get agent config, %v", err)
@@ -147,6 +147,8 @@ func (f *Features) enableMetricsFeature(_ string) []core.Plugin {
 		metricsSender := NewMetricsSender(f.commander)
 
 		return []core.Plugin{metrics, metricsThrottle, metricsSender}
+	} else {
+		log.Debugf("metrics features.go, already enabled so skipping the enablement")
 	}
 	return []core.Plugin{}
 }
@@ -188,7 +190,7 @@ func (f *Features) enableMetricsThrottleFeature(_ string) []core.Plugin {
 func (f *Features) enableMetricsSenderFeature(_ string) []core.Plugin {
 	if !f.pipeline.IsPluginAlreadyRegistered(agent_config.FeatureMetrics) &&
 		!f.pipeline.IsPluginAlreadyRegistered(agent_config.FeatureMetricsSender) {
-
+		log.Debugf("inside features.go, enabling metrics_sender")
 		conf, err := config.GetConfig(f.conf.ClientID)
 		if err != nil {
 			log.Warnf("Unable to get agent config, %v", err)
@@ -198,6 +200,8 @@ func (f *Features) enableMetricsSenderFeature(_ string) []core.Plugin {
 		metricsSender := NewMetricsSender(f.commander)
 
 		return []core.Plugin{metricsSender}
+	} else {
+		log.Debugf("inside features.go, already enabled metrics_sender")
 	}
 	return []core.Plugin{}
 }
