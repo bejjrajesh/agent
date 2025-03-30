@@ -45,7 +45,7 @@ func (r *MetricsSender) Init(pipeline core.MessagePipeInterface) {
 	r.started.Toggle()
 	r.pipeline = pipeline
 	r.ctx = pipeline.Context()
-	log.Info("MetricsSender initializing")
+	log.Infof("MetricsSender initializing %v %v", r.started, r.readyToSend)
 }
 
 func (r *MetricsSender) Close() {
@@ -61,7 +61,7 @@ func (r *MetricsSender) Info() *core.Info {
 func (r *MetricsSender) Process(msg *core.Message) {
 	if msg.Exact(core.AgentConnected) {
 		log.Debugf("AgentConnected message received in metrics sender %v", r.readyToSend)
-		r.readyToSend.Toggle()
+		r.readyToSend.Store(true)
 		return
 	}
 
