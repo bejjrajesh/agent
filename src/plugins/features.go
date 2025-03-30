@@ -8,14 +8,13 @@
 package plugins
 
 import (
+	"github.com/google/uuid"
 	agent_config "github.com/nginx/agent/sdk/v2/agent/config"
 	"github.com/nginx/agent/sdk/v2/agent/events"
 	"github.com/nginx/agent/sdk/v2/client"
 	sdkGRPC "github.com/nginx/agent/sdk/v2/grpc"
 	"github.com/nginx/agent/v2/src/core"
 	"github.com/nginx/agent/v2/src/core/config"
-
-	"github.com/google/uuid"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -113,20 +112,25 @@ func (f *Features) Process(msg *core.Message) {
 	plugins := []core.Plugin{}
 
 	if msg.Topic() == core.EnableFeature {
+		log.Debugf("received a request for enabling the feature")
 		for _, feature := range data.([]string) {
 			if initFeature, ok := f.featureMap[feature]; ok {
+				log.Debugf("enabling feature: %s", feature)
 				featurePlugins := initFeature(feature)
 				plugins = append(plugins, featurePlugins...)
 			}
 		}
 
 		err := f.pipeline.Register(f.conf.QueueSize, plugins, nil)
+		log.Debugf("registring plugins: %v", plugins)
 		if err != nil {
 			log.Warnf("Unable to register features: %v", err)
 		}
 
 		for _, plugin := range plugins {
+			log.Debugf("initializing plugin %s", plugin)
 			plugin.Init(f.pipeline)
+			log.Debugf("initialized plugin %s", plugin)
 		}
 	} else if msg.Topic() == core.NginxDetailProcUpdate {
 		f.processes = msg.Data().([]*core.Process)
