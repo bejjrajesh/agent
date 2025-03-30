@@ -60,6 +60,7 @@ func (r *MetricsSender) Info() *core.Info {
 
 func (r *MetricsSender) Process(msg *core.Message) {
 	if msg.Exact(core.AgentConnected) {
+		log.Debugf("AgentConnected message received in metrics sender %v", r.readyToSend)
 		r.readyToSend.Toggle()
 		return
 	}

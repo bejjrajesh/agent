@@ -156,6 +156,7 @@ func (c *Commander) dispatchLoop() {
 		case *proto.Command_NginxConfig, *proto.Command_NginxConfigResponse:
 			topic = core.CommNginxConfig
 		case *proto.Command_AgentConnectRequest, *proto.Command_AgentConnectResponse:
+			log.Debugf("agent connect request/response received, data=%v", cmd.GetData())
 			topic = core.AgentConnected
 		case *proto.Command_AgentConfigRequest, *proto.Command_AgentConfig:
 			log.Debugf("agent config %T command data type received and ignored", cmd.GetData())
