@@ -9,6 +9,7 @@ package plugins
 
 import (
 	"context"
+	"encoding/json"
 	"github.com/nginx/agent/sdk/v2"
 	agent_config "github.com/nginx/agent/sdk/v2/agent/config"
 	"github.com/nginx/agent/sdk/v2/client"
@@ -83,6 +84,11 @@ func (r *MetricsSender) Process(msg *core.Message) {
 			return
 		}
 		for _, p := range payloads {
+			bytes, mErr := json.Marshal(p)
+			if mErr != nil {
+				log.Debugf("error marshalling %s", mErr.Error())
+			}
+			log.Debugf("metrics payload is %s", string(bytes))
 			if !r.readyToSend.Load() {
 				log.Debugf("metrics_sender is not ready to send the metrics")
 				continue

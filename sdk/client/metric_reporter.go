@@ -158,6 +158,8 @@ func (r *metricReporter) Send(ctx context.Context, message Message) error {
 	switch message.Classification() {
 	case MsgClassificationMetric:
 		report, ok := message.Raw().(*proto.MetricsReport)
+		bytes, _ := report.Marshal()
+		fmt.Printf("sending metric : %s", string(bytes))
 		if !ok {
 			return fmt.Errorf("MetricReporter expected a metrics report message, but received %T", message.Data())
 		}
