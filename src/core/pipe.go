@@ -129,7 +129,7 @@ func (p *MessagePipe) DeRegister(pluginNames []string) error {
 			}
 		}
 	}
-
+	log.Infof("The following core plugins have been registered: %q", p.plugins)
 	return nil
 }
 
