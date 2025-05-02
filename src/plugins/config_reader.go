@@ -111,7 +111,7 @@ func (r *ConfigReader) updateAgentConfig(payloadAgentConfig *proto.AgentConfig) 
 
 			r.detailsMu.RLock()
 			log.Debugf("agent current features: %s", strings.Join(r.config.Features, ","))
-			log.Debugf("agent onDisk features: %s", strings.Join(r.config.Features, ","))
+			log.Debugf("agent onDisk features: %s", strings.Join(onDiskAgentConfig.Features, ","))
 			log.Debugf("agent received features: %s", strings.Join(payloadAgentConfig.Details.Features, ","))
 			synchronizeFeatures = !reflect.DeepEqual(payloadAgentConfig.Details.Features, onDiskAgentConfig.Features)
 			log.Debugf("agent features changed: %t", synchronizeFeatures)
