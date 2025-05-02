@@ -104,11 +104,13 @@ func (p *MessagePipe) Register(size int, plugins []Plugin, extensionPlugins []Ex
 func (p *MessagePipe) DeRegister(pluginNames []string) error {
 	p.mu.Lock()
 	defer p.mu.Unlock()
-
+	log.Debugf("checkpoint1:%s", strings.Join(pluginNames, ","))
 	var pluginsToRemove []Plugin
 	for _, name := range pluginNames {
+		log.Debugf("checkpoint2:%s", name)
 		for _, plugin := range p.plugins {
 			if plugin.Info().Name() == name {
+				log.Debugf("checkpoint3:%+v", plugin.Info())
 				pluginsToRemove = append(pluginsToRemove, plugin)
 			}
 		}
@@ -116,15 +118,19 @@ func (p *MessagePipe) DeRegister(pluginNames []string) error {
 
 	for _, plugin := range pluginsToRemove {
 		index := getIndex(plugin.Info().Name(), p.plugins)
-
+		log.Debugf("checkpoint4:%+v", index)
 		if index != -1 {
+			log.Debugf("checkpoint5:%+v", index)
 			p.plugins = append(p.plugins[:index], p.plugins[index+1:]...)
-
+			log.Debugf("checkpoint6:%+v", plugin)
 			plugin.Close()
-
+			log.Debugf("checkpoint7:%+v", plugin)
 			for _, subscription := range plugin.Subscriptions() {
+				log.Debugf("checkpoint8:%+v", plugin)
 				err := p.bus.Unsubscribe(subscription, plugin.Process)
+				log.Debugf("checkpoint9:%+v", plugin)
 				if err != nil {
+					log.Debugf("checkpoint10:%s", err.Error())
 					return err
 				}
 			}
