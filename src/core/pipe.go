@@ -106,16 +106,16 @@ func (p *MessagePipe) DeRegister(pluginNames []string) error {
 	defer p.mu.Unlock()
 	log.Debugf("checkpoint1:%s", strings.Join(pluginNames, ","))
 	var pluginsToRemove []Plugin
-	for _, name := range pluginNames {
+	for _, pName := range pluginNames {
 		for _, plugin := range p.plugins {
-			log.Debugf("checkpoint2:%v, %s", plugin.Info(), name)
-			if plugin.Info() != nil && plugin.Info().Name() == name {
+			log.Debugf("checkpoint2:%s, %s, %s", plugin.Info().Name(), plugin.Info().Version(), pName)
+			if plugin.Info() != nil && plugin.Info().Name() == pName {
 				log.Debugf("checkpoint3:%+v", plugin.Info())
 				pluginsToRemove = append(pluginsToRemove, plugin)
 			}
 		}
 	}
-
+	//log.Debugf("checkpoint111:%s", strings.Join(pluginsToRemove, ","))
 	for _, plugin := range pluginsToRemove {
 		index := getIndex(plugin.Info().Name(), p.plugins)
 		log.Debugf("checkpoint4:%+v", index)
@@ -140,7 +140,7 @@ func (p *MessagePipe) DeRegister(pluginNames []string) error {
 	for index, plugin := range p.plugins {
 		pluginList[index] = plugin.Info().Name()
 	}
-	log.Infof("The following core plugins have been registered after de-regsiter: %s", strings.Join(pluginList, ","))
+	log.Debugf("The following core plugins have been registered after de-regsiter: %s", strings.Join(pluginList, ","))
 	return nil
 }
 
