@@ -11,7 +11,6 @@ import (
 	"context"
 	"strings"
 
-	"github.com/nginx/agent/sdk/v2"
 	agent_config "github.com/nginx/agent/sdk/v2/agent/config"
 	"github.com/nginx/agent/sdk/v2/client"
 	"github.com/nginx/agent/sdk/v2/proto"
@@ -60,7 +59,7 @@ func (r *MetricsSender) Info() *core.Info {
 
 func (r *MetricsSender) Process(msg *core.Message) {
 	if msg.Exact(core.AgentConnected) {
-		r.readyToSend.Toggle()
+		r.readyToSend.Store(true)
 		return
 	}
 

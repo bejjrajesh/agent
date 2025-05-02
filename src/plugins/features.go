@@ -135,7 +135,7 @@ func (f *Features) Process(msg *core.Message) {
 
 func (f *Features) enableMetricsFeature(_ string) []core.Plugin {
 	if !f.pipeline.IsPluginAlreadyRegistered(agent_config.FeatureMetrics) {
-
+		log.Debugf("features.go: enabling metrics feature")
 		conf, err := config.GetConfig(f.conf.ClientID)
 		if err != nil {
 			log.Warnf("Unable to get agent config, %v", err)
