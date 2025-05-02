@@ -76,6 +76,7 @@ func (r *MetricsSender) Process(msg *core.Message) {
 			r.readyToSend.Store(false)
 			r.readyToSendMu.Unlock()
 		}
+		return
 	}
 	if msg.Exact(core.CommMetrics) {
 		payloads, ok := msg.Data().([]core.Payload)
