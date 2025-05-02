@@ -137,7 +137,7 @@ func (p *MessagePipe) DeRegister(pluginNames []string) error {
 		}
 	}
 	pluginList := make([]string, len(pluginsToRemove))
-	for index, plugin := range p.plugins {
+	for index, plugin := range pluginsToRemove {
 		pluginList[index] = plugin.Info().Name()
 	}
 	log.Debugf("The following core plugins have been registered after de-regsiter: %s", strings.Join(pluginList, ","))
