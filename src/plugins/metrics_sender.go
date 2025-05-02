@@ -59,6 +59,7 @@ func (r *MetricsSender) Info() *core.Info {
 
 func (r *MetricsSender) Process(msg *core.Message) {
 	if msg.Exact(core.AgentConnected) {
+		log.Warnf("Agent connected, updating send to report metrics")
 		r.readyToSend.Store(true)
 		return
 	}
@@ -71,6 +72,7 @@ func (r *MetricsSender) Process(msg *core.Message) {
 		}
 		for _, p := range payloads {
 			if !r.readyToSend.Load() {
+				log.Warnf("metrics sender it not ready to send metrics")
 				continue
 			}
 
