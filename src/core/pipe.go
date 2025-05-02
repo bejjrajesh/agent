@@ -108,7 +108,7 @@ func (p *MessagePipe) DeRegister(pluginNames []string) error {
 	var pluginsToRemove []Plugin
 	for _, name := range pluginNames {
 		for _, plugin := range p.plugins {
-			log.Debugf("checkpoint2:%+v", plugin)
+			log.Debugf("checkpoint2:%v, %s", plugin.Info(), name)
 			if plugin.Info() != nil && plugin.Info().Name() == name {
 				log.Debugf("checkpoint3:%+v", plugin.Info())
 				pluginsToRemove = append(pluginsToRemove, plugin)
