@@ -9,13 +9,13 @@ package plugins
 
 import (
 	"context"
-	"strings"
-
+	"github.com/nginx/agent/sdk/v2"
 	agent_config "github.com/nginx/agent/sdk/v2/agent/config"
 	"github.com/nginx/agent/sdk/v2/client"
 	"github.com/nginx/agent/sdk/v2/proto"
 	models "github.com/nginx/agent/sdk/v2/proto/events"
 	"github.com/nginx/agent/v2/src/core"
+	"strings"
 
 	log "github.com/sirupsen/logrus"
 	"go.uber.org/atomic"
