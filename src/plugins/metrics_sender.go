@@ -50,7 +50,7 @@ func (r *MetricsSender) Init(pipeline core.MessagePipeInterface) {
 	r.started.Toggle()
 	r.pipeline = pipeline
 	r.ctx = pipeline.Context()
-	log.Info("MetricsSender initializing")
+	log.Info("MetricsSender initializing, readyToSend=%t ", r.readyToSend)
 }
 
 func (r *MetricsSender) Close() {

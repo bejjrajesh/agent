@@ -9,6 +9,7 @@ package core
 
 import (
 	"context"
+	"strings"
 	"sync"
 
 	log "github.com/sirupsen/logrus"
@@ -129,7 +130,11 @@ func (p *MessagePipe) DeRegister(pluginNames []string) error {
 			}
 		}
 	}
-	log.Infof("The following core plugins have been registered: %q", p.plugins)
+	pluginList := make([]string, len(p.plugins))
+	for index, plugin := range p.plugins {
+		pluginList[index] = plugin.Info().Name()
+	}
+	log.Infof("plugins registered after de-resitering plugins: %s", strings.Join(pluginList, ","))
 	return nil
 }
 
