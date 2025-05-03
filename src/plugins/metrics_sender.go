@@ -90,11 +90,12 @@ func (r *MetricsSender) Process(msg *core.Message) {
 				log.Debugf("error marshalling %s", mErr.Error())
 			}
 			log.Debugf("metrics payload is %s", string(bytes))
+			r.readyToSendMu.RLock()
 			if !r.readyToSend.Load() {
 				log.Debugf("metrics_sender is not ready to send the metrics")
 				continue
 			}
-
+			r.readyToSendMu.RUnlock()
 			switch report := p.(type) {
 			case *proto.MetricsReport:
 				message := client.MessageFromMetrics(report)
