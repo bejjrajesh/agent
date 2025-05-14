@@ -79,6 +79,7 @@ func GetDefaultFeatures() []string {
 		FeatureNginxSSLConfig,
 		FeatureNginxCounting,
 		FeatureMetrics,
+		FeatureMetricsSender,
 		FeatureDataPlaneStatus,
 		FeatureProcessWatcher,
 		FeatureFileWatcher,
